@@ -33,16 +33,24 @@ actor MegaverseNetworkService: NetworkService {
         parameters?["candidateId"] = candidateId
         request.httpBody = try parameters.map { try JSONSerialization.data(withJSONObject: $0) }
 
-        let (data, response) = try await session.data(for: request)
+        while true {
+            let (data, response) = try await session.data(for: request)
 
-        guard let response = response as? HTTPURLResponse else {
-            throw NetworkError.invalidResponse()
-        }
+            guard let response = response as? HTTPURLResponse else {
+                throw NetworkError.invalidResponse()
+            }
 
-        guard response.statusCode == 200 else {
+            if response.statusCode == 200 {
+                return try endpoint.decode(data)
+            }
+
+            if response.statusCode == 429 {
+                let retryAfterSeconds = response.value(forHTTPHeaderField: "Retry-After").flatMap(Double.init) ?? 2
+                try await Task.sleep(for: .seconds(retryAfterSeconds))
+                continue
+            }
+
             throw NetworkError.invalidResponse(statusCode: response.statusCode)
         }
-
-        return try endpoint.decode(data)
     }
 }
