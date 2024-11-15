@@ -7,8 +7,12 @@
 
 import Foundation
 
-struct GoalResponse {
-    let goal: [[MegaverseObject]]
+public struct GoalResponse {
+    public let goal: [[MegaverseObject]]
+
+    public init(goal: [[MegaverseObject]]) {
+        self.goal = goal
+    }
 }
 
 // MARK: - Decodable

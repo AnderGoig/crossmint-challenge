@@ -7,13 +7,13 @@
 
 import Foundation
 
-enum MegaverseObject: CustomStringConvertible {
+public enum MegaverseObject: CustomStringConvertible {
     case space
     case polyanet
     case cometh(direction: String)
     case soloon(color: String)
 
-    var description: String {
+    public var description: String {
         switch self {
         case .space: return "SPACE"
         case .polyanet: return "POLYANET"
@@ -26,7 +26,7 @@ enum MegaverseObject: CustomStringConvertible {
 // MARK: - Decodable
 
 extension MegaverseObject: Decodable {
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let object = try container.decode(String.self)
         let components = object.split(separator: "_")

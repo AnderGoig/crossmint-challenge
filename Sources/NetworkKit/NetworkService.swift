@@ -7,23 +7,23 @@
 
 import Foundation
 
-protocol NetworkService {
+public protocol NetworkService {
     func request<Response>(_ endpoint: Endpoint<Response>) async throws -> Response
 }
 
 // MARK: - Megaverse
 
-actor MegaverseNetworkService: NetworkService {
-    let baseURL: URL
-    let candidateId: String
-    let session = URLSession.shared
+public actor MegaverseNetworkService: NetworkService {
+    private let baseURL: URL
+    private let candidateId: String
+    private let session = URLSession.shared
 
-    init(baseURL: URL = MegaverseAPI.baseURL, candidateId: String) {
+    public init(baseURL: URL = MegaverseAPI.baseURL, candidateId: String) {
         self.baseURL = baseURL
         self.candidateId = candidateId
     }
 
-    func request<Response>(_ endpoint: Endpoint<Response>) async throws -> Response {
+    public func request<Response>(_ endpoint: Endpoint<Response>) async throws -> Response {
         var request = URLRequest(url: baseURL.appending(path: endpoint.path))
         request.httpMethod = endpoint.method.rawValue.uppercased()
         request.allHTTPHeaderFields = endpoint.headers
