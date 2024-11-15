@@ -20,13 +20,17 @@ do {
     for row in goal.enumerated() {
         for column in row.element.enumerated() {
             switch column.element {
-            case "SPACE":
+            case .space:
                 break
-            case "POLYANET":
-                print("🪐 Creating \(column.element) at (\(row.offset),\(column.offset))...")
+            case .polyanet:
+                print("🪐 Creating \(column.element) at (\(row.offset), \(column.offset))...")
                 try await networkService.request(MegaverseAPI.Polyanets.create(atRow: row.offset, column: column.offset))
-            default:
-                print("⁉️ Unknown object \"\(column.element)\" at (\(row.offset),\(column.offset))")
+            case .soloon(let color):
+                print("🌙 Creating \(column.element) at (\(row.offset), \(column.offset))...")
+                try await networkService.request(MegaverseAPI.Soloons.create(atRow: row.offset, column: column.offset, color: color))
+            case .cometh(let direction):
+                print("☄️ Creating \(column.element) at (\(row.offset), \(column.offset))...")
+                try await networkService.request(MegaverseAPI.Comeths.create(atRow: row.offset, column: column.offset, direction: direction))
             }
         }
     }

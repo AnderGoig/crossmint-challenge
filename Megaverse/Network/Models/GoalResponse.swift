@@ -8,7 +8,7 @@
 import Foundation
 
 struct GoalResponse {
-    let goal: [[String]]
+    let goal: [[MegaverseObject]]
 }
 
 // MARK: - Decodable
